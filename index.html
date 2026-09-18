@@ -1,538 +1,193 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuickPrint - Online Print Request</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            DEFAULT: '#1e3a8a', // Deep professional navy blue accent
-                            dark: '#172554',
-                            light: '#f1f5f9',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- Inter Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            color: #0f172a;
-        }
-        /* Custom focus ring smoothness */
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #1e3a8a;
-            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.12);
-        }
-    </style>
+    <title>QuickPrint - Professional Print Request Portal</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="min-h-screen flex flex-col justify-between py-6 px-4 sm:px-6">
+<body>
 
-    <header class="max-w-xl mx-auto w-full text-center mb-6">
-        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand text-white font-bold text-xl shadow-md mb-3 tracking-wider">
-            QP
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight text-slate-900">QuickPrint</h1>
-        <p class="text-sm text-slate-600 mt-1">Send your print request in a few simple steps.</p>
-    </header>
+    <!-- Main Layout Wrapper -->
+    <div class="app-wrapper">
 
-    <main class="max-w-xl mx-auto w-full flex-grow">
-        <form id="printOrderForm" class="space-y-6" onsubmit="return false;">
-            
-            <!-- Print Documents Section -->
-            <div class="space-y-3">
-                <div class="flex items-center justify-between px-1">
-                    <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Print Documents</h2>
-                    <span id="fileCountBadge" class="text-xs bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded-full font-semibold">1 File</span>
-                </div>
-                <div id="fileCardsContainer" class="space-y-4">
-                    <!-- File cards will be injected here via JavaScript -->
-                </div>
+        <!-- Header Banner -->
+        <header class="shop-header">
+            <div class="logo-badge">QP</div>
+            <div class="header-text">
+                <h1 class="shop-title">QuickPrint</h1>
+                <p class="shop-subtitle">Professional Document Printing & Binding Services</p>
             </div>
+        </header>
 
-            <!-- Add Another File Button -->
-            <div>
-                <button type="button" id="addFileBtn" class="w-full py-3.5 px-4 border-2 border-dashed border-slate-300 rounded-xl text-sm font-semibold text-slate-700 hover:border-brand hover:text-brand bg-white transition-all flex items-center justify-center gap-2 shadow-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    + Add Another File
-                </button>
-            </div>
-<hr>
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
-                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-                    <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Customer Details & Collection</h2>
-                    <span class="text-xs text-brand font-semibold">Required</span>
-                </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label for="customerName" class="block text-xs font-medium text-slate-600 mb-1">Full Name</label>
-                        <input type="text" id="customerName" required placeholder="e.g. John Doe" class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-slate-50/50 focus:bg-white transition-colors">
+        <!-- Main Workspace (Desktop 2-Column Grid / Mobile Single Column) -->
+        <main class="workspace-grid">
+
+            <!-- Left / Main Column: Form Controls -->
+            <section class="form-column">
+                <form id="printOrderForm" novalidate>
+
+                    <div class="section-banner">
+                        <h2>1. Upload Details & Print Configuration</h2>
+                        <p>Configure each document's specifications independently.</p>
                     </div>
-                    <div>
-                        <label for="customerPhone" class="block text-xs font-medium text-slate-600 mb-1">Phone Number</label>
-                        <input type="tel" id="customerPhone" required placeholder="e.g. +91 98765 43210" class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-slate-50/50 focus:bg-white transition-colors">
+
+                    <!-- Files Container -->
+                    <div id="filesContainer">
+                        <!-- File Card 1 -->
+                        <div class="file-card" data-index="0">
+                            <div class="file-card-header">
+                                <span class="file-card-title">File 1</span>
+                                <span class="file-badge">Primary</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fileName_0">File Name *</label>
+                                <input type="text" id="fileName_0" class="file-name-input" placeholder="e.g. Assignment.pdf" required>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label>Print Type</label>
+                                    <div class="segmented-control print-type-group">
+                                        <button type="button" class="segment-btn active" data-value="Colour">Colour</button>
+                                        <button type="button" class="segment-btn" data-value="Black & White">Black & White</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group half">
+                                    <label for="copies_0">Number of Copies</label>
+                                    <div class="counter-control">
+                                        <button type="button" class="counter-btn minus-btn" aria-label="Decrease copies">-</button>
+                                        <input type="number" id="copies_0" class="copies-input" value="1" min="1" max="999">
+                                        <button type="button" class="counter-btn plus-btn" aria-label="Increase copies">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="paperSize_0">Paper Size</label>
+                                    <select id="paperSize_0" class="paper-size-select">
+                                        <option value="A4" selected>A4</option>
+                                        <option value="A3">A3</option>
+                                        <option value="A5">A5</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group half">
+                                    <label>Orientation</label>
+                                    <div class="segmented-control orientation-group">
+                                        <button type="button" class="segment-btn active" data-value="Portrait">Portrait</button>
+                                        <button type="button" class="segment-btn" data-value="Landscape">Landscape</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label>Printing Side</label>
+                                    <div class="segmented-control side-group">
+                                        <button type="button" class="segment-btn active" data-value="Single-sided">Single-sided</button>
+                                        <button type="button" class="segment-btn" data-value="Double-sided">Double-sided</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group half">
+                                    <label for="binding_0">Binding</label>
+                                    <select id="binding_0" class="binding-select">
+                                        <option value="No Binding" selected>No Binding</option>
+                                        <option value="Spiral Binding">Spiral Binding</option>
+                                        <option value="Comb Binding">Comb Binding</option>
+                                        <option value="Staple Binding">Staple Binding</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fileNotes_0">Instructions / Notes (Optional)</label>
+                                <textarea id="fileNotes_0" class="file-notes-input" placeholder="e.g. Print only pages 1 to 5, glossy paper..." rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add File Button -->
+                    <button type="button" id="addFileBtn" class="secondary-btn">+ Add Another File</button>
+
+                    <!-- Customer Details Section -->
+                    <div class="section-banner" style="margin-top: 32px;">
+                        <h2>2. Customer & Collection Information</h2>
+                        <p>Provide your contact details and scheduled pickup time.</p>
+                    </div>
+
+                    <div class="customer-card">
+                        <div class="form-group">
+                            <label for="customerName">Full Name *</label>
+                            <input type="text" id="customerName" placeholder="Enter your full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerPhone">Phone Number *</label>
+                            <input type="tel" id="customerPhone" placeholder="Enter mobile number" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="collectionTime">Expected Date & Time to Collect *</label>
+                            <input type="datetime-local" id="collectionTime" required>
+                            <span class="field-hint">Must be scheduled at least 15 minutes from now.</span>
+                        </div>
+                    </div>
+
+                    <!-- Submit Action Area -->
+                    <div class="action-area">
+                        <button type="submit" id="submitOrderBtn" class="primary-btn">SEND PRINT REQUEST</button>
+                        <p class="action-note">You will be asked to attach your files manually in Gmail.</p>
+                    </div>
+
+                </form>
+            </section>
+
+            <!-- Right Column: Live Order Summary Card (Visible on Desktop, stacked on Mobile) -->
+            <aside class="summary-column">
+                <div class="summary-card">
+                    <h3>Order Summary</h3>
+                    <div id="liveSummaryContent" class="summary-content">
+                        <p class="summary-placeholder">Configure your print files to preview order details.</p>
                     </div>
                 </div>
+            </aside>
 
-                <div>
-                    <label for="customerEmail" class="block text-xs font-medium text-slate-600 mb-1">Email Address</label>
-                    <input type="email" id="customerEmail" required placeholder="e.g. john@example.com" class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-slate-50/50 focus:bg-white transition-colors">
-                </div>
+        </main>
+    </div>
 
-                <div>
-                    <label for="collectionDateTime" class="block text-xs font-medium text-slate-600 mb-1">Expected Collection Date & Time</label>
-                    <input type="datetime-local" id="collectionDateTime" required class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-slate-50/50 focus:bg-white transition-colors cursor-pointer">
-                    <p id="collectionHelpText" class="text-[11px] text-slate-500 mt-1">Must be at least 15 minutes from now.</p>
-                </div>
+    <!-- Modal Popup Reminder -->
+    <div id="reminderModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 class="modal-title">Before You Continue</h3>
+            <p class="modal-desc">Please attach the following files in Gmail before sending your order.</p>
 
-                <div>
-                    <label for="customerNotes" class="block text-xs font-medium text-slate-600 mb-1">General Instructions (Optional)</label>
-                    <textarea id="customerNotes" rows="2" placeholder="e.g. Please ring bell upon arrival." class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-slate-50/50 focus:bg-white transition-colors"></textarea>
-                </div>
+            <div id="modalFileList" class="modal-file-list">
+                <!-- Dynamically populated file list -->
             </div>
 
-            <div class="space-y-3 pt-2">
-                <p class="text-xs text-center text-slate-500 font-medium">You will be asked to attach your files manually in Gmail.</p>
-                <button type="button" id="openModalBtn" class="w-full py-4 px-4 bg-brand hover:bg-brand-dark text-white font-semibold rounded-xl shadow-md transition-all text-base flex items-center justify-center gap-2">
-                    SEND PRINT REQUEST
-                </button>
+            <p class="modal-warning">
+                The files are not automatically attached by this website. Please make sure all the files listed above are manually attached in Gmail before sending the email.
+            </p>
+
+            <label class="checkbox-container">
+                <input type="checkbox" id="confirmCheckbox">
+                <span class="checkmark-text">I understand that I need to attach these files manually.</span>
+            </label>
+
+            <div class="modal-actions">
+                <button type="button" id="modalCancelBtn" class="btn-cancel">Cancel</button>
+                <button type="button" id="modalContinueBtn" class="btn-continue" disabled>Continue to Gmail</button>
             </div>
-
-        </form>
-    </main>
-
-    <div id="modalOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
-        <!-- Modal Dialog -->
-        <div id="modalContainer" class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 transform scale-95 transition-transform duration-200 max-h-[90vh] overflow-y-auto">
-            
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h3 class="text-lg font-bold text-slate-900">Before You Continue</h3>
-                <button type="button" id="closeModalXBtn" class="text-slate-400 hover:text-slate-600 p-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-
-            <p class="text-sm text-slate-700 font-medium">Please attach the following files in Gmail before sending your order.</p>
-
-            <!-- Dynamic File List in Modal -->
-            <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200">
-                <ul id="modalFileList" class="text-xs text-slate-700 space-y-1.5 list-disc list-inside font-medium">
-                    <!-- Injected via JS -->
-                </ul>
-            </div>
-
-            <div class="text-xs text-slate-600 bg-slate-100 p-3 rounded-xl border border-slate-200 leading-relaxed">
-                <strong class="text-slate-800 font-semibold">Important Note:</strong> The files are not automatically attached by this website. Please make sure all files listed above are manually attached in Gmail before sending the email.
-            </div>
-
-            <!-- Confirmation Checkbox -->
-            <div class="flex items-start gap-3 pt-2">
-                <input type="checkbox" id="confirmCheckbox" class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand cursor-pointer">
-                <label for="confirmCheckbox" class="text-xs font-medium text-slate-700 cursor-pointer select-none leading-relaxed">
-                    I understand that I need to attach these files manually.
-                </label>
-            </div>
-
-            <!-- Modal Action Buttons -->
-            <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
-                <button type="button" id="cancelModalBtn" class="flex-1 py-3 px-4 border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold rounded-xl text-sm transition-colors">
-                    Cancel
-                </button>
-                <button type="button" id="submitOrderBtn" disabled class="flex-1 py-3 px-4 bg-brand hover:bg-brand-dark text-white font-semibold rounded-xl text-sm transition-colors opacity-50 cursor-not-allowed">
-                    Continue to Gmail
-                </button>
-            </div>
-
         </div>
     </div>
 
-    <footer class="max-w-xl mx-auto w-full text-center text-xs text-slate-400 mt-8 pt-4 border-t border-slate-200">
-        &copy; 2026 QuickPrint Shop. All rights reserved.
-    </footer>
-
-    <script>
-        // State Management
-        let filesList = [
-            {
-                id: 1,
-                fileName: "Assignment.pdf",
-                printType: "Black & White",
-                copies: 1,
-                paperSize: "A4",
-                orientation: "Portrait",
-                printingSide: "Single-sided",
-                binding: "No Binding",
-                notes: ""
-            }
-        ];
-
-        let nextFileId = 2;
-
-        // DOM Elements
-        const fileCardsContainer = document.getElementById('fileCardsContainer');
-        const addFileBtn = document.getElementById('addFileBtn');
-        const openModalBtn = document.getElementById('openModalBtn');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalContainer = document.getElementById('modalContainer');
-        const closeModalXBtn = document.getElementById('closeModalXBtn');
-        const cancelModalBtn = document.getElementById('cancelModalBtn');
-        const submitOrderBtn = document.getElementById('submitOrderBtn');
-        const confirmCheckbox = document.getElementById('confirmCheckbox');
-        const modalFileList = document.getElementById('modalFileList');
-        const collectionDateTimeInput = document.getElementById('collectionDateTime');
-        const collectionHelpText = document.getElementById('collectionHelpText');
-        const fileCountBadge = document.getElementById('fileCountBadge');
-
-        // Initialize Collection Date & Time to exactly 15 minutes from now
-        function initializeCollectionTime() {
-            const now = new Date();
-            now.setMinutes(now.getMinutes() + 15);
-            
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            
-            const minDateTimeStr = `${year}-${month}-${day}T${hours}:${minutes}`;
-            collectionDateTimeInput.value = minDateTimeStr;
-            collectionDateTimeInput.min = minDateTimeStr;
-        }
-
-        // Validate that collection date/time is at least 15 min in the future
-        function validateCollectionTime() {
-            const selectedVal = collectionDateTimeInput.value;
-            if (!selectedVal) return false;
-
-            const selectedDate = new Date(selectedVal);
-            const minAllowed = new Date();
-            minAllowed.setMinutes(minAllowed.getMinutes() + 15);
-
-            if (selectedDate < minAllowed) {
-                return false;
-            }
-            return true;
-        }
-
-        collectionDateTimeInput.addEventListener('change', () => {
-            if (!validateCollectionTime()) {
-                collectionHelpText.textContent = "Error: Collection time must be at least 15 minutes from now.";
-                collectionHelpText.className = "text-[11px] text-rose-600 mt-1 font-medium";
-            } else {
-                collectionHelpText.textContent = "Collection time valid (at least 15 minutes from now).";
-                collectionHelpText.className = "text-[11px] text-emerald-600 mt-1 font-medium";
-            }
-        });
-
-        // Render File Cards
-        function renderFileCards() {
-            fileCardsContainer.innerHTML = '';
-            fileCountBadge.textContent = `${filesList.length} ${filesList.length === 1 ? 'File' : 'Files'}`;
-            
-            filesList.forEach((file, index) => {
-                const cardIndex = index + 1;
-                const cardDiv = document.createElement('div');
-                cardDiv.className = "bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm space-y-4 relative transition-all";
-                
-                cardDiv.innerHTML = `
-                    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                        <span class="text-sm font-bold text-slate-800 flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-lg bg-slate-100 text-slate-700 inline-flex items-center justify-center text-xs font-semibold">File ${cardIndex}</span>
-                        </span>
-                        ${filesList.length > 1 ? `
-                            <button type="button" onclick="removeFile(${file.id})" class="text-xs text-rose-600 hover:text-rose-700 font-medium px-2.5 py-1 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors flex items-center gap-1">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                Remove
-                            </button>
-                        ` : ''}
-                    </div>
-
-                    <!-- 1. File Name -->
-                    <div>
-                        <label class="block text-xs font-medium text-slate-600 mb-1">File Name</label>
-                        <input type="text" value="${escapeHtml(file.fileName)}" oninput="updateFileField(${file.id}, 'fileName', this.value)" placeholder="e.g. Assignment.pdf" required class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-slate-50/50 focus:bg-white transition-colors">
-                    </div>
-
-                    <!-- 2. Print Type -->
-                    <div>
-                        <label class="block text-xs font-medium text-slate-600 mb-1">Print Type</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button type="button" onclick="updateFileField(${file.id}, 'printType', 'Black & White')" class="py-2.5 px-3 text-xs font-semibold rounded-xl border transition-all text-center ${file.printType === 'Black & White' ? 'bg-brand text-white border-brand shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-300 hover:bg-slate-100'}">
-                                Black & White
-                            </button>
-                            <button type="button" onclick="updateFileField(${file.id}, 'printType', 'Colour')" class="py-2.5 px-3 text-xs font-semibold rounded-xl border transition-all text-center ${file.printType === 'Colour' ? 'bg-brand text-white border-brand shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-300 hover:bg-slate-100'}">
-                                Colour
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 3. Number of Copies -->
-                    <div>
-                        <label class="block text-xs font-medium text-slate-600 mb-1">Number of Copies</label>
-                        <div class="flex items-center w-36 border border-slate-300 rounded-xl bg-slate-50 overflow-hidden shadow-2xs">
-                            <button type="button" onclick="adjustCopies(${file.id}, -1)" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition-colors">-</button>
-                            <input type="number" min="1" value="${file.copies}" onchange="updateFileField(${file.id}, 'copies', parseInt(this.value) || 1)" class="w-full text-center text-sm bg-transparent border-x border-slate-300 py-2 focus:outline-none font-semibold">
-                            <button type="button" onclick="adjustCopies(${file.id}, 1)" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition-colors">+</button>
-                        </div>
-                    </div>
-
-                    <!-- 4. Paper Size & 5. Orientation -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-600 mb-1">Paper Size</label>
-                            <select onchange="updateFileField(${file.id}, 'paperSize', this.value)" class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-slate-50/50 focus:bg-white transition-colors font-medium">
-                                <option value="A4" ${file.paperSize === 'A4' ? 'selected' : ''}>A4</option>
-                                <option value="A3" ${file.paperSize === 'A3' ? 'selected' : ''}>A3</option>
-                                <option value="A5" ${file.paperSize === 'A5' ? 'selected' : ''}>A5</option>
-                                <option value="Other" ${file.paperSize === 'Other' ? 'selected' : ''}>Other</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-600 mb-1">Orientation</label>
-                            <div class="grid grid-cols-2 gap-1.5">
-                                <button type="button" onclick="updateFileField(${file.id}, 'orientation', 'Portrait')" class="py-2.5 px-2 text-xs font-semibold rounded-xl border transition-all text-center ${file.orientation === 'Portrait' ? 'bg-brand text-white border-brand shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-300 hover:bg-slate-100'}">
-                                    Portrait
-                                </button>
-                                <button type="button" onclick="updateFileField(${file.id}, 'orientation', 'Landscape')" class="py-2.5 px-2 text-xs font-semibold rounded-xl border transition-all text-center ${file.orientation === 'Landscape' ? 'bg-brand text-white border-brand shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-300 hover:bg-slate-100'}">
-                                    Landscape
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 6. Printing Side & 7. Binding -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-600 mb-1">Printing Side</label>
-                            <div class="grid grid-cols-2 gap-1.5">
-                                <button type="button" onclick="updateFileField(${file.id}, 'printingSide', 'Single-sided')" class="py-2.5 px-2 text-xs font-semibold rounded-xl border transition-all text-center ${file.printingSide === 'Single-sided' ? 'bg-brand text-white border-brand shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-300 hover:bg-slate-100'}">
-                                    Single
-                                </button>
-                                <button type="button" onclick="updateFileField(${file.id}, 'printingSide', 'Double-sided')" class="py-2.5 px-2 text-xs font-semibold rounded-xl border transition-all text-center ${file.printingSide === 'Double-sided' ? 'bg-brand text-white border-brand shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-300 hover:bg-slate-100'}">
-                                    Double
-                                </button>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-600 mb-1">Binding</label>
-                            <select onchange="updateFileField(${file.id}, 'binding', this.value)" class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-slate-50/50 focus:bg-white transition-colors font-medium">
-                                <option value="No Binding" ${file.binding === 'No Binding' ? 'selected' : ''}>No Binding</option>
-                                <option value="Spiral Binding" ${file.binding === 'Spiral Binding' ? 'selected' : ''}>Spiral Binding</option>
-                                <option value="Comb Binding" ${file.binding === 'Comb Binding' ? 'selected' : ''}>Comb Binding</option>
-                                <option value="Staple Binding" ${file.binding === 'Staple Binding' ? 'selected' : ''}>Staple Binding</option>
-                                <option value="Other" ${file.binding === 'Other' ? 'selected' : ''}>Other</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- 8. Notes for this file -->
-                    <div>
-                        <label class="block text-xs font-medium text-slate-600 mb-1">Notes for this File (Optional)</label>
-                        <input type="text" value="${escapeHtml(file.notes || '')}" oninput="updateFileField(${file.id}, 'notes', this.value)" placeholder="e.g. Print pages 5-10 only, Fit to page" class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-slate-50/50 focus:bg-white transition-colors">
-                    </div>
-                `;
-                fileCardsContainer.appendChild(cardDiv);
-            });
-        }
-
-        // Helper to prevent HTML injection in inputs
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
-
-        // Add New File Card
-        addFileBtn.addEventListener('click', () => {
-            filesList.push({
-                id: nextFileId++,
-                fileName: `Document_${filesList.length + 1}.pdf`,
-                printType: "Black & White",
-                copies: 1,
-                paperSize: "A4",
-                orientation: "Portrait",
-                printingSide: "Single-sided",
-                binding: "No Binding",
-                notes: ""
-            });
-            renderFileCards();
-        });
-
-        // Remove File Card
-        window.removeFile = function(id) {
-            if (filesList.length > 1) {
-                filesList = filesList.filter(f => f.id !== id);
-                renderFileCards();
-            }
-        };
-
-        // Update Field Value
-        window.updateFileField = function(id, field, value) {
-            const file = filesList.find(f => f.id === id);
-            if (file) {
-                file[field] = value;
-            }
-        };
-
-        // Adjust Copies via plus/minus
-        window.adjustCopies = function(id, change) {
-            const file = filesList.find(f => f.id === id);
-            if (file) {
-                file.copies = Math.max(1, file.copies + change);
-                renderFileCards();
-            }
-        };
-
-        // Modal Logic
-        openModalBtn.addEventListener('click', () => {
-            // Validate basic customer details
-            const customerName = document.getElementById('customerName').value.trim();
-            const customerPhone = document.getElementById('customerPhone').value.trim();
-            const customerEmail = document.getElementById('customerEmail').value.trim();
-            
-            if (!customerName || !customerPhone || !customerEmail) {
-                alert("Please fill in your Full Name, Phone Number, and Email Address before proceeding.");
-                return;
-            }
-
-            // Validate collection date & time (15 mins rule)
-            if (!validateCollectionTime()) {
-                alert("Please select a valid collection date & time that is at least 15 minutes from now.");
-                collectionDateTimeInput.focus();
-                return;
-            }
-
-            // Populate Modal File List
-            modalFileList.innerHTML = '';
-            filesList.forEach((file, index) => {
-                const li = document.createElement('li');
-                const nameStr = file.fileName.trim() !== '' ? file.fileName : `Unnamed File ${index + 1}`;
-                li.textContent = `${index + 1}. ${nameStr}`;
-                modalFileList.appendChild(li);
-            });
-
-            // Reset checkbox and button state
-            confirmCheckbox.checked = false;
-            submitOrderBtn.disabled = true;
-            submitOrderBtn.classList.add('opacity-50', 'cursor-not-allowed');
-
-            // Show Modal with Animation
-            modalOverlay.classList.remove('hidden');
-            setTimeout(() => {
-                modalOverlay.classList.remove('opacity-0');
-                modalContainer.classList.remove('scale-95');
-                modalContainer.classList.add('scale-100');
-            }, 10);
-        });
-
-        function closeModal() {
-            modalOverlay.classList.add('opacity-0');
-            modalContainer.classList.remove('scale-100');
-            modalContainer.classList.add('scale-95');
-            setTimeout(() => {
-                modalOverlay.classList.add('hidden');
-            }, 200);
-        }
-
-        closeModalXBtn.addEventListener('click', closeModal);
-        cancelModalBtn.addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) closeModal();
-        });
-
-        // Checkbox enable/disable submit button
-        confirmCheckbox.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                submitOrderBtn.disabled = false;
-                submitOrderBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            } else {
-                submitOrderBtn.disabled = true;
-                submitOrderBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            }
-        });
-
-        // Generate Mailto and Submit Order
-        submitOrderBtn.addEventListener('click', () => {
-            if (confirmCheckbox.checked) {
-                const customerName = document.getElementById('customerName').value.trim();
-                const customerPhone = document.getElementById('customerPhone').value.trim();
-                const customerEmail = document.getElementById('customerEmail').value.trim();
-                const collectionDateTime = document.getElementById('collectionDateTime').value;
-                const customerNotes = document.getElementById('customerNotes').value.trim();
-
-                // Format collection time nicely
-                let formattedCollectionTime = collectionDateTime;
-                try {
-                    const dt = new Date(collectionDateTime);
-                    formattedCollectionTime = dt.toLocaleString('en-US', { 
-                        dateStyle: 'medium', 
-                        timeStyle: 'short' 
-                    });
-                } catch(e) {}
-
-                const shopEmail = "josephs2k5@gmail.com ";
-                const subject = "New Print Order";
-
-                let body = `Hello,\n\nI would like to place the following print order.\n\n`;
-                body += `CUSTOMER INFORMATION:\n`;
-                body += `Name: ${customerName}\n`;
-                body += `Phone: ${customerPhone}\n`;
-                body += `Email: ${customerEmail}\n`;
-                body += `Expected Collection: ${formattedCollectionTime}\n`;
-                if (customerNotes) {
-                    body += `General Instructions: ${customerNotes}\n`;
-                }
-                body += `\n----------------------------------------\n\n`;
-
-                filesList.forEach((file, index) => {
-                    const fName = file.fileName.trim() !== '' ? file.fileName : `Unnamed File ${index + 1}`;
-                    body += `FILE ${index + 1}\n\n`;
-                    body += `File Name: ${fName}\n`;
-                    body += `Print Type: ${file.printType}\n`;
-                    body += `Copies: ${file.copies}\n`;
-                    body += `Paper Size: ${file.paperSize}\n`;
-                    body += `Orientation: ${file.orientation}\n`;
-                    body += `Printing: ${file.printingSide}\n`;
-                    body += `Binding: ${file.binding}\n`;
-                    if (file.notes && file.notes.trim() !== '') {
-                        body += `Notes for this file: ${file.notes.trim()}\n`;
-                    }
-                    body += `\n`;
-                });
-
-                body += `----------------------------------------\n\nFILES TO ATTACH:\n\n`;
-                filesList.forEach((file, index) => {
-                    const fName = file.fileName.trim() !== '' ? file.fileName : `Unnamed File ${index + 1}`;
-                    body += `${index + 1}. ${fName}\n`;
-                });
-
-                body += `\nPlease attach all the above files before sending this email.\n\nThank you.`;
-
-                const mailtoLink = `mailto:${shopEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                
-                window.location.href = mailtoLink;
-                closeModal();
-            }
-        });
-
-        // Initial render and setup on load
-        window.onload = function() {
-            initializeCollectionTime();
-            renderFileCards();
-        };
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
